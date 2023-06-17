@@ -1,4 +1,4 @@
-## SVM Section 1: Hyperplane and Maximal Margin Classifier
+## Support Vector Machine in R: Hyperplane and Maximal Margin Classifier (Part 01)
 A blog in Medium that introduced Hyperplane and Maximal Margin Classifier in Medium
 
 ## Usage
