@@ -7,6 +7,6 @@ A blog in Medium that introduced Hyperplane and Maximal Margin Classifier in Med
 ![supportvector_margin_hyperplane](https://github.com/gisynw/Medium-Hyperplane-and-Maximal-Margin-Classifier/assets/25189735/ceeee7f4-f190-49e7-abc3-94010fe42937)
 
 ## Credits
-This blog is written based on Gareth, J., Daniela, W., Trevor, H., & Robert, T. (2013). An introduction to statistical learning: with applications in R. Spinger.
+This blog is written based on Chapter 09 in Gareth, J., Daniela, W., Trevor, H., & Robert, T. (2013). An introduction to statistical learning: with applications in R. Spinger.
 
 Part of the code is from [here](https://www.datacamp.com/tutorial/support-vector-machines-r)
