@@ -8,4 +8,5 @@ A blog in Medium that introduced Hyperplane and Maximal Margin Classifier in Med
 
 ## Credits
 This blog is written based on Gareth, J., Daniela, W., Trevor, H., & Robert, T. (2013). An introduction to statistical learning: with applications in R. Spinger.
+
 Part of the code is from [here](https://www.datacamp.com/tutorial/support-vector-machines-r)
