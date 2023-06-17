@@ -1,0 +1,117 @@
+---
+title: "Support Vector Machine"
+author: "Yanan Wu"
+date: "2023-06-17"
+output:
+  html_document:
+    fig_caption: no
+  pdf_document: default
+---
+
+```{r}
+library(e1071)
+set.seed(123)
+```
+# 1. What is a hyperplane
+## 2-D hyerplane is defined as $\beta_0 + \beta_1x_1 + \beta_2x_2 = 0$  
+
+```{r}
+## user-defined function to draw 2-d hyperplane, set up the range of x and y for points is    
+## from min to max, the output is a seuqnece of points that satisfy the hyperplane's equation
+hyper_func = function(beta0, beta1, beta2, min,max, length){
+  data_ = list()
+  data_[[1]] <- seq(min, max, length.out = length)
+  data_[[2]] <- (beta0 + beta1 * data_[[1]]) / -beta2
+  return(data_)
+}
+```
+
+# 2. Classification using a hyperplane. 
+Figure 1. Draw a hyperplane and points in two difference classes.
+```{r}
+## randomly generate points for a specific range
+x1 = runif(200, min=-2, max=2)
+x2 = runif(200, min=-2, max=2)
+input_data = cbind(x1, x2)
+plot(x1,x2, pch = 16)
+
+plane_func = 2+3 * x1 + 2 * x2
+input_data = cbind(input_data, plane_func)
+## calculate the class for each points based on which side they locate.  
+group_data = lapply(input_data[,3], function(x) if(x>0){return('red')}else{
+  return('green')})
+input_data = cbind(input_data, groups = unlist(group_data))
+plot(input_data[,'x1'],input_data[,'x2'],col = input_data[,'groups'], pch = 16, xlab = 'x1', ylab = 'x2')
+
+##draw a 2-D hyperplane,beta_0 = 2, beta_1 = 3, beta_2 = 2. min & max = 2. Length = 200  
+pts_plane = hyper_func(2,3,2,-2,2,200)
+lines(pts_plane[[1]], pts_plane[[2]], col = "black", lwd = 2)
+```
+
+# 3.The Maximal Margin Classifier
+Figure 2. Multiple hyperplance
+```{r}
+#filter some points to illustrate this sample
+sample_pts = input_data[which(abs(as.numeric(input_data[,'plane_func'])) > 3),]
+plot(sample_pts[,'x1'],sample_pts[,'x2'], col = sample_pts[,'groups'],pch = 16, xlab = 'x1', ylab = 'x2')
+
+# draw three possible hyperplane
+pts_plane = hyper_func(2,3,2,-2,2,200)
+lines(pts_plane[[1]], pts_plane[[2]], col = "black", lwd = 2)
+
+pts_plane = hyper_func(1.5,1.5,2,-2,2,200)
+lines(pts_plane[[1]], pts_plane[[2]], col = "black", lwd = 2)
+
+pts_plane = hyper_func(2.2,2.2,2,-2,2,200)
+lines(pts_plane[[1]], pts_plane[[2]], col = "black", lwd = 2)
+```
+
+## Find the support vector hyperplane
+##x variable should be numeric format, y should be factor.
+```{r}
+## the plot function in R is not visualization well, so we can draw another plot to visualize the result from SVM. 
+##This example illustrate the classification for two classes based on svm. 
+##so x variable should be numeric format, y variable should be factor.
+svm_data = data.frame(x1 = as.numeric(sample_pts[,'x1']), x2 = as.numeric(sample_pts[,'x2']),groups = as.factor(sample_pts[,'groups']))
+##using svm to find the optimal hyperplane.
+svmfit = svm(groups~x1+x2, data = svm_data, kernel = 'linear', scale = FALSE)
+plot(svmfit, svm_data)
+```
+
+Figure 3. Optimal hyperplane, maximal margin, plane and support vector. 
+```{r}
+## generate a regular grid dots within a range
+make.grid = function(x, n = 75) {
+  grange = apply(x, 2, range)
+  x1 = seq(from = grange[1,1], to = grange[2,1], length = n)
+  x2 = seq(from = grange[1,2], to = grange[2,2], length = n)
+  expand.grid(x1 = x1, x2 = x2)
+}
+
+## x is the x_1 and x_2. 
+x = svm_data[,c(1,2)]
+xgrid = make.grid(svm_data[,c(1,2)])
+##predict class for regular grid dots
+ygrid = predict(svmfit, xgrid)
+##plot regular grid dots
+plot(xgrid, col = c("green","red")[as.numeric(ygrid)], pch = 20, cex = .2)
+##plots points in two class
+points(svm_data, col = as.character(svm_data[,3]), pch = 19)
+##plot support vector, svmfit$index can provide index for support vector
+points(x[svmfit$index,], pch = 5, cex = 2, col = 'blue')
+
+## get coefficients of optimal hyperplane (beta_0 (intercept), beta_1 and beta_2)
+coeffis = coef(svmfit)
+## draw optimal hyperplane
+pts_plane = hyper_func(coeffis[1],coeffis[2],coeffis[3],-2,2,200)
+lines(pts_plane[[1]], pts_plane[[2]], col = "black", lwd = 2)
+## draw margin for negative class, so intercept plus 1.Why plus 1? See in Equation 1.5
+pts_plane_nagative = hyper_func(coeffis[1]+1,coeffis[2],coeffis[3],-2,2,200)
+lines(pts_plane_nagative[[1]], pts_plane_nagative[[2]], col = "black", lwd = 2, lty = 3)
+## draw margin for positive class, so intercept minus 1. Why minus 1? See in Equation 1.5
+pts_plane_positive = hyper_func(coeffis[1]-1,coeffis[2],coeffis[3],-2,2,200)
+lines(pts_plane_positive[[1]], pts_plane_positive[[2]], col = "black", lwd = 2, lty = 3)
+```
+
+
+
