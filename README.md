@@ -1,5 +1,5 @@
 ## Support Vector Machine in R: Hyperplane and Maximal Margin Classifier (Part 01)
-A [blog](https://ywu120766.medium.com/support-vector-machine-in-r-hyperplane-and-maximal-margin-classifier-part-01-21c3f93f751d) in Medium that introduced Hyperplane and Maximal Margin Classifier in Medium
+A [blog](https://ywu120766.medium.com/support-vector-machine-in-r-hyperplane-and-maximal-margin-classifier-part-01-21c3f93f751d) on Medium that introduced Hyperplane and Maximal Margin Classifier in Medium
 
 ## Usage
 ### If you are a beginner to SVM, you can check the blog first to know the hyperplane and Maximal Margin Classifier first. 
